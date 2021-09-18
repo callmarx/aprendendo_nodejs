@@ -5,3 +5,7 @@
 [![love](https://img.shields.io/badge/Code%20with-%F0%9F%96%A4-lightgreen)](https://callmarx.github.io/about/)
 
 Repositório destinado as minhas cabeçadas estudando *nodejs*.
+
+# Anotações
+
+Conforme avanço no aprendizado vou alimentando [aqui](./anotacoes.md)

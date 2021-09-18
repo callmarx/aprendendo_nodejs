@@ -46,8 +46,8 @@ fs.writeFileSync('about_me.txt', 'I live in São Paulo')
 ```
 
 ## Diferença entre *require* e *import*
-Assim como *commonJS*, a inclusão de módulos é feita com `require` do *nodejs* e com `import` do
-*ES6* (*ECMAScript 6* ou mais atual), seja de arquivos separados ou de módulos nativos.
+A inclusão de módulos é feita com `require` do *nodejs* ou com `import` do *ES6* (*ECMAScript 6*
+ou mais atual), seja de arquivos separados ou de módulos nativos.
 
 ### Com `require`:
 Função nativa (*built-in*) do *nodejs*, ou seja, não é disponível no *ES6* isolado como
@@ -75,8 +75,8 @@ modules.export = getBlogTitle
 
 ### Com `import`:
 
-É uma declaração (*statement*) para carregar módulos, disponível desde o *ES6*. Sua
-execução é **assíncrona**.
+É uma declaração (*statement*) para carregar módulos, disponível desde o *ES6*. <u>Sua
+execução é **assíncrona**</u>.
 
 Partindo do mesmo exemplo:
 
@@ -99,8 +99,7 @@ console.log(title)
 **OBS**: Para que o `import` funcione com *nodejs*, é necessário ter o arquivo `package.json` com
 `"type": "module"`. Esta opção diz ao *nodejs* para interpretar os arquivos `.js` com a sintaxe do
 *ES*, caso contrario obterá o erro `SyntaxError: Cannot use import statement outside a module`.
-Veja mais em <https://nodejs.org/api/packages.html>. O exemplo acima está disponível na pasta
-[src/import_example](src/import_example/).
+Veja mais em <https://nodejs.org/api/packages.html>.
 
 ### Pontos importantes
 1. `require` pode ser chamado em qualquer parte do código e `import` deve ser descrito no início
@@ -226,3 +225,52 @@ sendo o `package-lock.json` recomendado não ser editado deixando apenas para o 
 A pasta `node_modules` também será criada na pasta raiz, mas como o *npm* pode recria-las com o
 comando `npm install` usando o `package.json` e o `package-lock.json` como referencia, é uma boa
 prática incluir qualquer referencia a pastas `node_modules` ao seu `.gitignore`.
+
+## *Arrow Function*
+
+*Arrow functions*, introduzido a partir do *ES6*, permite escrever funções mais concisas, podendo
+até serem resumidas à uma linha.
+
+```javascript
+// regular function
+let regularSquare = function(x){
+  return (x*x)
+}
+
+// arrow function
+let arrowSquare = (x) => {
+  return (x*x)
+}
+
+// concise arrow function
+let conciseSquare = (x) => x*x
+```
+
+Ambas *regular functions* e *arrow functions* funcionam de maneira parecida, mas com algumas
+diferenças importantes.
+
+### `this`
+
+A *arrow function* não possui escopo interno para `this`, como a *regular function*. Utilizar
+`this` dentro de uma *arrow function* irá referencia o escopo de onde a *arrow function* esta
+inserida (e não internamente dela).
+
+**Exemplo 1:**
+```javascript
+function Mensagem() {
+  this.mensagem = 'Passou'
+
+  // Arrow function
+  this.loggar = () => {
+    console.log(this.mensagem)
+  }
+}
+
+const msg = new Mensagem()
+msg.loggar() // imprime "Passou"
+```
+
+<https://www.geeksforgeeks.org/difference-between-regular-functions-and-arrow-functions/>
+<https://medium.com/frontend-quest/arrow-functions-vs-functions-9048ec12b5c6>
+
+## Controverso e confuso `this.`
