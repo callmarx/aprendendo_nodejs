@@ -18,7 +18,7 @@ organização Internacional ECMA que então foi definida oficialmente como ECMAS
 (adquirida pela Oracle em 2009). Pode-se dizer que JavaScript é um "dialeto", um "apelido", para
 ECMAScript.
 
-## *Regular function* e *Arrow Function*
+## *Regular Function* e *Arrow Function*
 
 *Arrow functions*, introduzido a partir do *ES6* (*ECMAScript 6* ou mais atual), permite escrever
 funções mais concisas, podendo até serem resumidas à uma linha.
@@ -181,6 +181,43 @@ someArrow(1, 2, 3)
 // throws this error "Uncaught ReferenceError: arguments is not defined"
 ```
 
+### Atenção para a Sintaxe de Espelhamento
+
+É possível ter acesso à múltiplos argumentos (sem restringir uma quantidade) com a
+*arrow function* através da sintaxe de espalhamento (*spread syntax*) através do uso de `...` + o
+nome da variável (*spread operator*). Veja uma exemplo a seguir:
+
+```javascript
+const sum = (...args) => {
+  // args is an array with all arguments passed
+  return args.reduce((a, b) => a + b, 0)
+}
+sum(1,2)     // will return 3
+sum(1,2,3)   // will return 6
+sum(1,2,3,4) // will return 10
+```
+
+Um *spread operator*, no caso acima `...ags`, retorna um *array* descompactado. Ou sejam, ele
+"espalha" (*spread*) o *array*. No entanto, trata-se de um **operador de propagação** que funciona apenas como
+em um argumento para uma função ou em um literal de array. Por exemplo, o código a seguir não
+funciona:
+
+```javascript
+const arr = [0, 1, 2]
+const spreaded = ...arr
+// will throw this error: "Uncaught SyntaxError: Unexpected token '...'"
+```
+
+Para o código acima funcionar, precisa ser o seguinte:
+
+```javascript
+const arr = [0, 1, 2]
+const spreaded = [...arr] // spreaded will be an array with same values of arr
+
+// we also can do
+spreaded = [...arr, 3] // spreaded will be [0, 1, 2, 3]
+```
+
 ### Construtores e inicialização (vulgo `new`)
 
 As *arrow functions* não têm o recurso *prototype*, o qual podemos "simular" orientação à objetos
@@ -216,7 +253,137 @@ Além do mais, como vimos no item sobre `this`, a *arrow function* não possui e
 `this` próprio (acessa o de onde foi inserida), logo também não faria sentido poder ser
 inicializada.
 
-# Framework Node.js, gerenciador de pacotes NPM e outras coisas
+## Estrutura de dados
+PENDING!!!
+
+## Programação Funcional
+PENDING!!!
+
+## Objetos e Orientação à objetos (POO)
+PENDING!!!
+
+### Associação desestruturada
+
+Do inglês *destructuring assignment*, trata-se de uma sintaxe especial que nos permite
+"descompactar" um *array* ou objeto à um conjunto de variáveis.
+
+#### Em *arrays*
+
+```javascript
+// Example 1:
+let names = ["Eugenio", "Nila"]
+let [firstName, surname] = names
+
+console.log(firstName) // prints "Eugenio"
+console.log(surname)   // prints "Nila"
+
+// Example 2:
+const [a, b,,, c] = [1, 2, 3, 4, 5, 6];
+// variable a will have 1
+// variable b will have 2
+// variable c will have 5
+
+console.log(a, b, c) // prints "1 2 5"
+```
+
+#### Em objetos
+
+Em objetos é importante pontuar que essa associação funcionará ou se os nomes das variáveis forem
+os mesmos dos atributos de um objeto (como no exemplo 3 a seguir) **ou** se esses atributos forem
+especificados (exemplo 4).
+
+```javascript
+// Example 3:
+const HIGH_TEMPERATURES = {
+  yesterday: 75,
+  today: 77,
+  tomorrow: 80
+}
+
+const { today, tomorrow } = HIGH_TEMPERATURES
+// variable today will have 77
+// variable tomorrow will have 80
+
+// Example 4:
+const HIGH_TEMPERATURES = {
+  yesterday: 75,
+  today: 77,
+  tomorrow: 80
+};
+
+const { today: highToday, tomorrow: highTomorrow}  = HIGH_TEMPERATURES
+// variable highToday will have 77
+// variable highTomorrow will have 80
+```
+Note ainda, que no exemplo 2 que o atributo vai como "chave" e a variável como "valor" para essa
+associação desestruturada. A mesma lógica deve ser aplicada para atributos aninhados (*nested*).
+
+```javascript
+// Example 5: with nested attributes
+const LOCAL_FORECAST = {
+  yesterday: { low: 61, high: 75 },
+  today: { low: 64, high: 77 },
+  tomorrow: { low: 68, high: 80 }
+};
+
+const { today: { low: lowToday, high: highToday }} = LOCAL_FORECAST
+// variable lowToday will have 64
+// variable highToday will have 77
+```
+
+#### Combinando com *spread operator*
+
+Podemos combinar essa associação desestruturada com a sintaxe de espalhamento, o *spread operator*.
+Digamos que preciso implementar a função `removeFirstTwo()` que dada um *array* de argumento
+devemos retornar ou outro *array* sem seus dois primeiros elementos. Veja como fica:
+
+```javascript
+const source = [1,2,3,4,5,6,7,8,9,10]
+function removeFirstTwo(list) {
+  const [,,...arr] = list // we ignore the two first elements
+  return arr
+}
+const arr = removeFirstTwo(source)
+```
+
+#### Pode ser utilizada como parâmetro
+
+Podemos fazer essa desestruturação diretamente nos parâmetros de uma função ao invés de trabalhar
+internamente com um objeto ou *array* passado como parâmetro.
+
+```javascript
+const stats = {
+  max: 56.78,
+  standard_deviation: 4.34,
+  median: 34.54,
+  mode: 23.87,
+  min: -0.75,
+  average: 35.85
+};
+
+// Example with a whole object as argument
+function getHalf(obj) {
+  return (obj.max + obj.min) / 2.0
+}
+getHalf(stats) // will return 28.015
+
+// Example with destructured argument
+const betterGetHalf = ({ max, min }) => (max + min) / 2.0;
+betterGetHalf(stats) // will return 28.015
+```
+
+## Promessa - não minha, do ECMAScript, juro!
+
+O objeto `Promise`, meio pré-definido, que representa um eventual sucesso ou falha de uma operação
+assíncrona.
+
+PENDING!!!
+
+# Node.js
+
+Node.js é um "ambiente executador" - *runtime environment* - de JavaScript para a parte do lado
+servidor de aplicação (popular *server side* ou *back-end*), ou seja, serve para ser executado
+fora do navegador, instalado em uma maquina com Linux, MacOS ou Microsoft Windows.
 
 ## Instalação
 Preferi utilizar o gerenciador de versão *nvm* - *Node Version Manager*. Ele não instala nada
@@ -333,6 +500,28 @@ if(articleCount>0){
 3. `import` é assíncrono! Isso deve ser repetido porque em grandes aplicação, carregar módulos
 um-por-um, ou seja, sincronamente como é o caso de `require`, compromete a performance da aplicação.
 
+
+### Posso até exportar uma função anonima!
+
+Embora isso seja uma característica do ECMAScript, achei importe pontuar aqui na parte de Node.js
+já que falamos anteriormente sobre as diferenças de `require` e `import`. Fiquei confuso quando vi
+isso a primeira vez. Suponha que temos o arquivo `iam_not_fool.js` com o seguinte:
+
+```javascript
+// iam_not_fool.js
+export default () => console.log('Hello world!');
+```
+
+Parece meme né?! Porque exportar uma função anonima?
+Ora, porque eu posso associar essa função à algum nome em sua importação.
+
+```javascript
+// On other file, like index.js, in same folder
+import helloWord from './iam_not_fool.js'
+
+helloWorld() // will print "Hello world" :)
+```
+
 ## Gerenciador de pacotes NPM
 Para utilizar bibliotecas e pacotes de terceiros precisamos do *npm* que já é instalado junto com o
 *nodejs*, mesmo com nosso gerenciador de versão *npm*.
@@ -445,8 +634,14 @@ prática incluir qualquer referencia a pastas `node_modules` ao seu `.gitignore`
 
 Abaixo segue os links de artigos, postagens e cursos pelos quais eu passei.
 
-
+- <https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures>
 - <https://stackoverflow.com/a/2475528>
+- <https://en.wikipedia.org/wiki/JavaScript>
+- <https://en.wikipedia.org/wiki/ECMAScript>
+- <https://en.wikipedia.org/wiki/Ecma_International>
+- <https://en.wikipedia.org/wiki/Node.js>
+- <https://nodejs.org/api/>
+- <https://github.com/nvm-sh/nvm>
 - <https://www.geeksforgeeks.org/difference-between-regular-functions-and-arrow-functions/>
 - <https://medium.com/frontend-quest/arrow-functions-vs-functions-9048ec12b5c6>
 - <https://blog.bitsrc.io/javascript-require-vs-import-47827a361b77>
