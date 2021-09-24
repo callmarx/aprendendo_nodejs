@@ -4,6 +4,21 @@ Node.js é um "ambiente executador" - *runtime environment* - de JavaScript para
 servidor de aplicação (popular *server side* ou *back-end*), ou seja, serve para ser executado
 fora do navegador, instalado em uma maquina com Linux, MacOS ou Microsoft Windows.
 
+## Índice
+
+- [Instalação](#instalação)
+- [Documentação](#documentação)
+- [Módulos nativos (*core modules*)](#módulos-nativos-core-modules)
+    - [Diferença entre *require* e *import*](#diferença-entre-require-e-import)
+        - [Com `require`](#com-require)
+        - [Com `import`](#com-import)
+        - [Pontos importantes](#pontos-importantes)
+    - [Posso até exportar uma função anonima!](#posso-até-exportar-uma-função-anonima)
+- [Gerenciador de pacotes NPM](#gerenciador-de-pacotes-npm)
+    - [Necessário para uma aplicação em *Node.js*](#necessário-para-uma-aplicação-em-nodejs)
+    - [Adicionando um pacote](#adicionando-um-pacote)
+- [Referências](#referências)
+
 ## Instalação
 Preferi utilizar o gerenciador de versão *nvm* - *Node Version Manager*. Ele não instala nada
 globalmente (como usuário *root* no linux), mantendo os códigos fontes na pasta *home* do usuário.
@@ -247,14 +262,7 @@ A pasta `node_modules` também será criada na pasta raiz, mas como o *npm* pode
 comando `npm install` usando o `package.json` e o `package-lock.json` como referencia, é uma boa
 prática incluir qualquer referencia a pastas `node_modules` ao seu `.gitignore`.
 
-# TypeScript
-PENDING!!!
-
-## Typeorm
-PENDING!!! (Active Record vs Data Mapper)
-<https://github.com/typeorm/typeorm/blob/master/docs/active-record-data-mapper.md>
-
-# Artigos, postagens, cursos, etc
+## Referências
 
 Abaixo segue os links de artigos, postagens e cursos pelos quais eu passei.
 
@@ -264,3 +272,4 @@ Abaixo segue os links de artigos, postagens e cursos pelos quais eu passei.
 - <https://blog.bitsrc.io/javascript-require-vs-import-47827a361b77>
 - <https://www.geeksforgeeks.org/difference-between-node-js-require-and-es6-import-and-export/>
 - <https://stackoverflow.com/a/46677972>
+- <https://www.freecodecamp.org/news/free-8-hour-node-express-course/>

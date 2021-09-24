@@ -1,5 +1,5 @@
 // Fixed replacement of 'require' for 'import' with:
-// https://github.com/yargs/yargs/issues/1854
+// https://github.com/yargs/yargs/issues/1854#issuecomment-787509517
 
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
