@@ -9,4 +9,4 @@ que é Node.js. Não, pera! Tem o TypeScript...
 
 # Anotações
 
-Conforme avanço no aprendizado vou alimentando [aqui](./anotacoes.md)
+Conforme avanço no aprendizado vou alimentando algumas anotações na pasta [doc][./doc].
