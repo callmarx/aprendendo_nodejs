@@ -11,24 +11,24 @@ em programação) é do
 ## Índice
 
 - [Mas é JavaScript ou ECMAScript?](#mas-é-javascript-ou-ecmascript)
-- [*Regular Function* vs *Arrow Function*](#regular-function-vs-arrow-function)
-    - [Não se perca com o `this`](#não-se-perca-com-o-this)
-    - [*arrow function* é sempre anônima](#arrow-function-é-sempre-anônima)
-    - [Acesso à argumentos](#acesso-à-argumentos)
-    - [Atenção para a Sintaxe de Espelhamento](#atenção-para-a-sintaxe-de-espelhamento)
-    - [Construtores e inicialização (vulgo `new`)](#construtores-e-inicialização-vulgo-new)
 - [Estrutura de dados](#estrutura-de-dados)
-- [Programação Funcional](#programação-funcional)
-- [Objetos e Orientação à objetos (POO)](#objetos-e-orientação-à-objetos-poo)
     - [Associação desestruturada](#associação-desestruturada)
         - [Em *arrays*](#em-arrays)
         - [Em objetos](#em-objetos)
         - [Combinando com *spread operator*](#combinando-com-spread-operator)
         - [Pode ser utilizada como parâmetro](#pode-ser-utilizada-como-parâmetro)
-- [Promessa - não minha, do ECMAScript, juro!](#promessa---não-minha-do-ecmascript-juro)
+- [Programação Funcional](#programação-funcional)
+    - [*Regular Function* vs *Arrow Function*](#regular-function-vs-arrow-function)
+        - [Não se perca com o `this`](#não-se-perca-com-o-this)
+        - [*arrow function* é sempre anônima](#arrow-function-é-sempre-anônima)
+        - [Acesso à argumentos](#acesso-à-argumentos)
+        - [Atenção para a Sintaxe de Espelhamento](#atenção-para-a-sintaxe-de-espelhamento)
+        - [Construtores e inicialização (vulgo `new`)](#construtores-e-inicialização-vulgo-new)
+    - [Promessa - não minha, do ECMAScript, juro!](#promessa---não-minha-do-ecmascript-juro)
+- [Objetos e Orientação à objetos (POO)](#objetos-e-orientação-à-objetos-poo)
 - [Referências](#referências)
 
-## Mas é JavaScript ou ECMAScript?
+# Mas é JavaScript ou ECMAScript?
 
 Parece confuso mas é uma questão de historia. O JavaScript surgiu em 1995 com proposito de ser um
 script simples para navegadores, propiciando interações dinâmicas nos sites dos quais o HTML e CSS
@@ -42,6 +42,137 @@ organização Internacional ECMA que então foi definida oficialmente como ECMAS
 **o certo é ECMAScript!** O nome JavaScript nem é aberto! Ele é uma marca comercial da Sun
 (adquirida pela Oracle em 2009). Pode-se dizer que JavaScript é um "dialeto", um "apelido", para
 ECMAScript.
+
+
+
+# Estrutura de dados
+Nada assustador nessa parte, apenas acho legal pontuar que *array* e *collections of key-value
+pairs* (que no Ruby chamamos de *hash*) são ambos considerados objetos.
+
+```javascript
+let arr = [1,2,3]
+typeof arr // will return 'object'
+
+let obj = { say: "hi!" }
+typeof obj // will return 'object'
+```
+
+Exitem operações básicas de manipulação de array como `push()`, `pop()`, `unshift()`, `shift()` etc,
+como métodos predefinidos do objeto array. No caso dos objetos "chave-valor", eles podem ser
+acessador com `obj.chave` ou `obj[chave]`, podendo inclusive ter chaves na forma de *string*.
+
+## Associação desestruturada
+
+Do inglês *destructuring assignment*, trata-se de uma sintaxe especial que nos permite
+"descompactar" um *array* ou objeto à um conjunto de variáveis.
+
+### Em *arrays*
+
+```javascript
+// Example 1:
+let names = ["Eugenio", "Nila"]
+let [firstName, surname] = names
+
+console.log(firstName) // prints "Eugenio"
+console.log(surname)   // prints "Nila"
+
+// Example 2:
+const [a, b,,, c] = [1, 2, 3, 4, 5, 6];
+// variable a will have 1
+// variable b will have 2
+// variable c will have 5
+
+console.log(a, b, c) // prints "1 2 5"
+```
+
+### Em objetos
+
+Em objetos é importante pontuar que essa associação funcionará ou se os nomes das variáveis forem
+os mesmos dos atributos de um objeto (como no exemplo 3 a seguir) **ou** se esses atributos forem
+especificados (exemplo 4).
+
+```javascript
+// Example 3:
+const HIGH_TEMPERATURES = {
+  yesterday: 75,
+  today: 77,
+  tomorrow: 80
+}
+
+const { today, tomorrow } = HIGH_TEMPERATURES
+// variable today will have 77
+// variable tomorrow will have 80
+
+// Example 4:
+const HIGH_TEMPERATURES = {
+  yesterday: 75,
+  today: 77,
+  tomorrow: 80
+};
+
+const { today: highToday, tomorrow: highTomorrow}  = HIGH_TEMPERATURES
+// variable highToday will have 77
+// variable highTomorrow will have 80
+```
+Note ainda, que no exemplo 2 que o atributo vai como "chave" e a variável como "valor" para essa
+associação desestruturada. A mesma lógica deve ser aplicada para atributos aninhados (*nested*).
+
+```javascript
+// Example 5: with nested attributes
+const LOCAL_FORECAST = {
+  yesterday: { low: 61, high: 75 },
+  today: { low: 64, high: 77 },
+  tomorrow: { low: 68, high: 80 }
+};
+
+const { today: { low: lowToday, high: highToday }} = LOCAL_FORECAST
+// variable lowToday will have 64
+// variable highToday will have 77
+```
+
+### Combinando com *spread operator*
+
+Podemos combinar essa associação desestruturada com a sintaxe de espalhamento, o *spread operator*.
+Digamos que preciso implementar a função `removeFirstTwo()` que dada um *array* de argumento
+devemos retornar ou outro *array* sem seus dois primeiros elementos. Veja como fica:
+
+```javascript
+const source = [1,2,3,4,5,6,7,8,9,10]
+function removeFirstTwo(list) {
+  const [,,...arr] = list // we ignore the two first elements
+  return arr
+}
+const arr = removeFirstTwo(source)
+```
+
+### Pode ser utilizada como parâmetro
+
+Podemos fazer essa desestruturação diretamente nos parâmetros de uma função ao invés de trabalhar
+internamente com um objeto ou *array* passado como parâmetro.
+
+```javascript
+const stats = {
+  max: 56.78,
+  standard_deviation: 4.34,
+  median: 34.54,
+  mode: 23.87,
+  min: -0.75,
+  average: 35.85
+};
+
+// Example with a whole object as argument
+function getHalf(obj) {
+  return (obj.max + obj.min) / 2.0
+}
+getHalf(stats) // will return 28.015
+
+// Example with destructured argument
+const betterGetHalf = ({ max, min }) => (max + min) / 2.0;
+betterGetHalf(stats) // will return 28.015
+```
+
+# Programação Funcional
+PENDING!!!
 
 ## *Regular Function* vs *Arrow Function*
 
@@ -278,134 +409,21 @@ Além do mais, como vimos no item sobre `this`, a *arrow function* não possui e
 `this` próprio (acessa o de onde foi inserida), logo também não faria sentido poder ser
 inicializada.
 
-## Estrutura de dados
-PENDING!!!
-
-## Programação Funcional
-PENDING!!!
-
-## Objetos e Orientação à objetos (POO)
-PENDING!!!
-
-### Associação desestruturada
-
-Do inglês *destructuring assignment*, trata-se de uma sintaxe especial que nos permite
-"descompactar" um *array* ou objeto à um conjunto de variáveis.
-
-#### Em *arrays*
-
-```javascript
-// Example 1:
-let names = ["Eugenio", "Nila"]
-let [firstName, surname] = names
-
-console.log(firstName) // prints "Eugenio"
-console.log(surname)   // prints "Nila"
-
-// Example 2:
-const [a, b,,, c] = [1, 2, 3, 4, 5, 6];
-// variable a will have 1
-// variable b will have 2
-// variable c will have 5
-
-console.log(a, b, c) // prints "1 2 5"
-```
-
-#### Em objetos
-
-Em objetos é importante pontuar que essa associação funcionará ou se os nomes das variáveis forem
-os mesmos dos atributos de um objeto (como no exemplo 3 a seguir) **ou** se esses atributos forem
-especificados (exemplo 4).
-
-```javascript
-// Example 3:
-const HIGH_TEMPERATURES = {
-  yesterday: 75,
-  today: 77,
-  tomorrow: 80
-}
-
-const { today, tomorrow } = HIGH_TEMPERATURES
-// variable today will have 77
-// variable tomorrow will have 80
-
-// Example 4:
-const HIGH_TEMPERATURES = {
-  yesterday: 75,
-  today: 77,
-  tomorrow: 80
-};
-
-const { today: highToday, tomorrow: highTomorrow}  = HIGH_TEMPERATURES
-// variable highToday will have 77
-// variable highTomorrow will have 80
-```
-Note ainda, que no exemplo 2 que o atributo vai como "chave" e a variável como "valor" para essa
-associação desestruturada. A mesma lógica deve ser aplicada para atributos aninhados (*nested*).
-
-```javascript
-// Example 5: with nested attributes
-const LOCAL_FORECAST = {
-  yesterday: { low: 61, high: 75 },
-  today: { low: 64, high: 77 },
-  tomorrow: { low: 68, high: 80 }
-};
-
-const { today: { low: lowToday, high: highToday }} = LOCAL_FORECAST
-// variable lowToday will have 64
-// variable highToday will have 77
-```
-
-#### Combinando com *spread operator*
-
-Podemos combinar essa associação desestruturada com a sintaxe de espalhamento, o *spread operator*.
-Digamos que preciso implementar a função `removeFirstTwo()` que dada um *array* de argumento
-devemos retornar ou outro *array* sem seus dois primeiros elementos. Veja como fica:
-
-```javascript
-const source = [1,2,3,4,5,6,7,8,9,10]
-function removeFirstTwo(list) {
-  const [,,...arr] = list // we ignore the two first elements
-  return arr
-}
-const arr = removeFirstTwo(source)
-```
-
-#### Pode ser utilizada como parâmetro
-
-Podemos fazer essa desestruturação diretamente nos parâmetros de uma função ao invés de trabalhar
-internamente com um objeto ou *array* passado como parâmetro.
-
-```javascript
-const stats = {
-  max: 56.78,
-  standard_deviation: 4.34,
-  median: 34.54,
-  mode: 23.87,
-  min: -0.75,
-  average: 35.85
-};
-
-// Example with a whole object as argument
-function getHalf(obj) {
-  return (obj.max + obj.min) / 2.0
-}
-getHalf(stats) // will return 28.015
-
-// Example with destructured argument
-const betterGetHalf = ({ max, min }) => (max + min) / 2.0;
-betterGetHalf(stats) // will return 28.015
-```
-
 ## Promessa - não minha, do ECMAScript, juro!
+PENDING!!!
 
 O objeto `Promise`, meio pré-definido, que representa um eventual sucesso ou falha de uma operação
 assíncrona.
 
-PENDING!!!
+# Objetos e Orientação à objetos (POO)
 
+**IMPORTANTE**: Confesso que depois de fazer a seção de POO na trilha do
+[freeCodeCamp](https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/#object-oriented-programming),
+fiquei beeem cansado com ~~toda essa bagunça~~ do *prototype*, então eu não julgo ninguém que
+"pular isso" e utilizar apenas a definição `class NomedaClasse {...}` com seu `constructor`.
+**Contudo, recomendo** a leitura deste artigo: <https://www.toptal.com/javascript/es6-class-chaos-keeps-js-developer-up>
 
-## Referências
+# Referências
 
 Abaixo segue os links de artigos, postagens e cursos pelos quais eu passei.
 
@@ -416,3 +434,4 @@ Abaixo segue os links de artigos, postagens e cursos pelos quais eu passei.
 - <https://en.wikipedia.org/wiki/Ecma_International>
 - <https://www.geeksforgeeks.org/difference-between-regular-functions-and-arrow-functions/>
 - <https://medium.com/frontend-quest/arrow-functions-vs-functions-9048ec12b5c6>
+- <https://www.toptal.com/javascript/es6-class-chaos-keeps-js-developer-up>
